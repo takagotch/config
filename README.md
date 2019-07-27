@@ -132,9 +132,52 @@ f = file('test.txt', 'w')
 cfg1.save(f)
 ```
 
-```
+```java
+Config devConfig = originalConfig 
+  .getConfig("dev")
+  .withFallback(originalConfig)
+  
+boolean getBoolean(String path, boolean fallback)
+
+Boolean getBoolean(String path)
+
+class Settings(config: Config) {
+  config.checkValid(ConfigFactory.defaultReference(), "simple-lib")
+  
+  val foo = config.getString("simple-lib.foo")
+  val bar = config.getInt("simple-lib.bar")
+}
+
+implicit class RichConfig(val underlying: Config) extends AnyVal {
+  def getOptionalBoolean(path: String): Option[Boolean] = if (underlying.hasPath(path)) {
+    Some(underlying.getBoolean(path))
+  } else {
+    None
+  }
+}
+
+import com.typeafe.config.ConfigFactory
+
+Config conf = ConfigFactory.load();
+int bar1 = conf.getInt("foo.bar");
+Config foo = conf.getConfig("foo");
+int bar2 = foo.getInt("bar");
+
+class Setting(config: Config) {
+  config.checkValid(ConfigFactory.defaultreference(), "simple-lib")
+  
+  val foo = config.getString("simple-lib.foo")
+  val bar = config.getInt("simple-lib.bar")
+}
+
+libraryDependencies += "com.typesafe" % "config" % "1.3.4"
 ```
 
-```
+```html
+<dependency>
+  <groupId>com.typesafe</groupId>
+  <artifactId>config</artifactId>
+  <version>1.3.4</version>
+</dependency>
 ```
 
